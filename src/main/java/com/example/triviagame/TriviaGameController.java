@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.AnchorPane;
 
 import java.io.FileNotFoundException;
 
@@ -28,81 +29,61 @@ public class TriviaGameController {
     private Button AnsBtn;
 
     @FXML
-    private Canvas cnvs;
-
-    @FXML
     private Label questionLabel;
 
+    @FXML
+    private Label greetLabel;
+
+    @FXML
+    private Label scoreLabel;
+
+//    @FXML
+//    private Label finalScoreLabel;
+
+    @FXML
+    private AnchorPane triviaPane;
+    @FXML
+    private AnchorPane finishPane;
+
+
+
+
+    @FXML
+    private Button yesBtn;
+
+    @FXML
+    private Button noBtn;
+
     private GraphicsContext gc;
-    private Questions que;
-    private TriviaGameLogic game;
-    //  private HangManBody body;
-    private int drawCounter;
-    private boolean finished;
-    private boolean win;
+    private QuestionsReserve que;
+    private Question game;
     final ToggleGroup group = new ToggleGroup();
+    boolean right = false;
+    boolean firstRound = true;
+    boolean lastRound = false;
+
 
 
     public void initialize() throws FileNotFoundException {
-        que = new Questions();
-        game = new TriviaGameLogic();
+        que = new QuestionsReserve();
         //   body = new HangManBody();
-        gc = cnvs.getGraphicsContext2D();
-        gc.setLineWidth(5);
-        que.parseQuestions();
-//        body.build();
-//        initGame();
         ansA.setToggleGroup(group);
         ansB.setToggleGroup(group);
         ansC.setToggleGroup(group);
         ansD.setToggleGroup(group);
-
-    }
-
-    @FXML
-    void ansAPressed(ActionEvent event) {
-
-    }
-
-    @FXML
-    void ansBPressed(ActionEvent event) {
-
-    }
-
-    @FXML
-    void ansCPressed(ActionEvent event) {
-
-    }
-
-    @FXML
-    void ansDPressed(ActionEvent event) {
-
+        initGame();
     }
 
     @FXML
     void ansBtnPressed(ActionEvent event) {
-        System.out.println(group.getSelectedToggle()==ansC);
+        checkAnswer();
+        if (que.questionsLeft() > 0) {
+            game.setQuestion(que.getQuestion());
+            game.setShuffeldAnswers(que.getAnswers());
+        } else
+            lastRound = true;
+        updateLabels();
 
-
-    }
-
-    @FXML
-    private void goBtnPressed() {
-//        String guess = guessField.getText();
-//        if (game.checkValidity(guess))
-//            runGame(guess);
-//        else
-//            JOptionPane.showMessageDialog(null, "Please enter one alphabetic character only!\nAlso, make sure you didnt try it yet.", "Error", JOptionPane.ERROR_MESSAGE);
-//        guessField.clear();
-//
-//        if (game.getTriesLeft() == 0) {
-//            JOptionPane.showMessageDialog(null, "Game Over!\nYou have passed the guesses limit.", "Game Over", JOptionPane.INFORMATION_MESSAGE);
-//            finishGame();
-//        }
-//        else if (game.checkWin()) {
-//            win = true;
-//            finishGame();
-//        }
     }
 
     private void initGame() {
@@ -111,8 +92,47 @@ public class TriviaGameController {
 //        win = false;
 //        finishScene();
 //        drawCounter = 0;
-//        game.setFullWord(dict.generateWord());
-//        game.prepWordLength(game.getFullWord().length());
-//        updateLabels();
+        que.parseQuestions();
+        game = new Question();
+        game.setQuestion(que.getQuestion());
+        game.setShuffeldAnswers(que.getAnswers());
+        updateLabels();
+        firstRound = false;
+    }
+
+    public void checkAnswer() {
+        if (group.getSelectedToggle() == ansA)
+            right = ansA.getText().equals(game.getCorrectAnswer());
+        else if (group.getSelectedToggle() == ansB)
+            right = ansB.getText().equals(game.getCorrectAnswer());
+        else if (group.getSelectedToggle() == ansC)
+            right = ansC.getText().equals(game.getCorrectAnswer());
+        else if (group.getSelectedToggle() == ansD)
+            right = ansD.getText().equals(game.getCorrectAnswer());
+        game.updateScore(right);
+    }
+
+
+    public void updateLabels() {
+        if (!firstRound) {
+            greetLabel.setText(game.greetMessage(right));
+            greetLabel.setVisible(true);
+            scoreLabel.setText(game.getScore() + "");
+        }
+        if (!lastRound) {
+            int index = 0;
+            questionLabel.setText(game.getQuestion());
+            ansA.setText(game.getAnswer(index++));
+            ansB.setText(game.getAnswer(index++));
+            ansC.setText(game.getAnswer(index++));
+            ansD.setText(game.getAnswer(index++));
+        }
+        else{
+           // finalScoreLabel.setText(game.getScore() + "");
+//            finalScoreLabel.setVisible(true);
+            finishPane.setVisible(true);
+            triviaPane.setVisible(false);
+
+        }
     }
 }

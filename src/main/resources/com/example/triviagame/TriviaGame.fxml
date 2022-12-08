@@ -5,34 +5,29 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onDragDetected="#ansCPressed" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #A4E79D;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.triviagame.TriviaGameController">
     <children>
         <Canvas fx:id="cnvs" height="51.0" layoutX="531.0" layoutY="21.0" width="40.0" />
-      <Label fx:id="questionLabel" layoutX="70.0" layoutY="64.0" text="Question 1">
+      <Label fx:id="questionLabel" layoutX="60.0" layoutY="56.0" prefHeight="33.0" prefWidth="490.0" text="Question 1">
          <font>
-            <Font name="Century Schoolbook" size="51.0" />
+            <Font name="Century Schoolbook" size="20.0" />
          </font>
       </Label>
       <Button fx:id="AnsBtn" layoutX="226.0" layoutY="324.0" mnemonicParsing="false" onAction="#ansBtnPressed" text="Send" />
-      <HBox alignment="CENTER" layoutX="70.0" layoutY="136.0" prefHeight="173.0" prefWidth="332.0" spacing="300.0">
+      <VBox layoutX="305.0" layoutY="126.0" prefHeight="173.0" prefWidth="291.0" spacing="100.0">
          <children>
-            <VBox prefHeight="131.0" prefWidth="100.0" spacing="100.0">
-               <children>
-                  <RadioButton fx:id="ansA" mnemonicParsing="false" onAction="#ansAPressed" text="A" />
-                  <RadioButton fx:id="ansB" mnemonicParsing="false" onAction="#ansBPressed" text="B" />
-               </children>
-            </VBox>
-            <VBox prefHeight="136.0" prefWidth="100.0" spacing="100.0">
-               <children>
-                    <RadioButton fx:id="ansC" mnemonicParsing="false" onAction="#ansCPressed" text="C" />
-                    <RadioButton fx:id="ansD" mnemonicParsing="false" onAction="#ansDPressed" text="D" />
-               </children>
-            </VBox>
+              <RadioButton fx:id="ansC" mnemonicParsing="false" onAction="#ansCPressed" text="C" />
+              <RadioButton fx:id="ansD" mnemonicParsing="false" onAction="#ansDPressed" text="D" />
          </children>
-      </HBox>
+      </VBox>
+      <VBox layoutX="18.0" layoutY="126.0" prefHeight="173.0" prefWidth="302.0" spacing="100.0">
+         <children>
+            <RadioButton fx:id="ansA" mnemonicParsing="false" onAction="#ansAPressed" prefHeight="33.0" prefWidth="302.0" text="A" />
+            <RadioButton fx:id="ansB" mnemonicParsing="false" onAction="#ansBPressed" prefHeight="30.0" prefWidth="291.0" text="B" />
+         </children>
+      </VBox>
     </children>
 </AnchorPane>
