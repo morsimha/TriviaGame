@@ -1,8 +1,8 @@
 package com.example.triviagame;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -10,6 +10,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 
+import javax.swing.*;
 import java.io.FileNotFoundException;
 
 public class TriviaGameController {
@@ -37,22 +38,13 @@ public class TriviaGameController {
     @FXML
     private Label scoreLabel;
 
-//    @FXML
-//    private Label finalScoreLabel;
+    @FXML
+    private Label finalScoreLabel;
 
     @FXML
     private AnchorPane triviaPane;
     @FXML
     private AnchorPane finishPane;
-
-
-
-
-    @FXML
-    private Button yesBtn;
-
-    @FXML
-    private Button noBtn;
 
     private GraphicsContext gc;
     private QuestionsReserve que;
@@ -85,8 +77,19 @@ public class TriviaGameController {
         updateLabels();
 
     }
+    @FXML
+    void yesBtnPressed(ActionEvent event) {
+//        game.resetGame();
+//        initGame();
+    }
+    @FXML
+    void noBtnPressed(ActionEvent event) {
+        Platform.exit();
+        JOptionPane.showMessageDialog(null, "Good Bye!", "GoodBye", JOptionPane.INFORMATION_MESSAGE);
+    }
 
-    private void initGame() {
+
+        private void initGame() {
 //        gc.clearRect(0, 0, cnvs.getWidth(), cnvs.getHeight());
 //        finished = false;
 //        win = false;
@@ -128,8 +131,7 @@ public class TriviaGameController {
             ansD.setText(game.getAnswer(index++));
         }
         else{
-           // finalScoreLabel.setText(game.getScore() + "");
-//            finalScoreLabel.setVisible(true);
+            finalScoreLabel.setText(scoreLabel.getText());
             finishPane.setVisible(true);
             triviaPane.setVisible(false);
 
