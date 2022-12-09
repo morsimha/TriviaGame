@@ -4,25 +4,29 @@ import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Scanner;
 
 public class QuestionsReserve {
+    private final String FILE_NAME = "trivia.txt";
+    private final int MAX_ANSWERS = 4;
 
     private ArrayList<String> questions = new ArrayList<String>();
     private ArrayList<String> answers = new ArrayList<String>();
-    private final String FILE_NAME = "trivia.txt";
-    private final int MAX_ANSWERS = 4;
     private int questionNum = 0;
-    private int questionsIndex = 0;
+    private int questionIndex = 0;
+    private int totalQuestions;
 
-    public int questionsLeft(){
-        return questionsIndex;
+    public void resetQuestions(){
+        questionNum = 0;
+        questionIndex = totalQuestions;
     }
 
+    public int questionsLeft(){
+        return questionIndex;
+    }
 
     public String getQuestion(){
-            questionsIndex--;
+            questionIndex--;
             return questions.get(questionNum/MAX_ANSWERS);
     }
 
@@ -51,12 +55,13 @@ public class QuestionsReserve {
             while (input.hasNextLine()) {
                 if (counter % 5 == 0) {
                     questions.add(input.nextLine());
-                    questionsIndex++;
+                    questionIndex++;
                 }
                 else
                     answers.add(input.nextLine());
                 counter++;
             }
+            totalQuestions = questionIndex;
             input.close();
         }
         catch (IOException e) {

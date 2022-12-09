@@ -6,20 +6,17 @@ import java.util.Collections;
 public class Question {
     private String question;
     private ArrayList<String> shuffeldAnswers = new ArrayList<String>();
-    private int questionCounter;
-    private int score;
+    private int score = 0;
     private String correctAns;
-    private boolean correctGuess;
 
-    public void setQuestion(String currQuestion){
-        question = currQuestion;
+
+    public void resetGame(){
+        score = 0;
+        correctAns="";
+        question="";
+        shuffeldAnswers.clear();
     }
 
-    public void setShuffeldAnswers(ArrayList<String> answers){
-        correctAns = answers.get(0);
-        Collections.shuffle(answers);
-        shuffeldAnswers = answers;
-    }
 
     public String getQuestion(){
         return question;
@@ -37,13 +34,15 @@ public class Question {
         return score;
     }
 
-    public int getNextSession(){
-        return questionCounter;
+    public void setQuestion(String currQuestion){
+        question = currQuestion;
     }
 
-//    public void nextQuestion(){
-//        return questionCounter;
-//    }
+    public void setShuffeldAnswers(ArrayList<String> answers){
+        correctAns = answers.get(0);
+        Collections.shuffle(answers);
+        shuffeldAnswers = answers;
+    }
 
     public void updateScore(boolean right){
         if (right)

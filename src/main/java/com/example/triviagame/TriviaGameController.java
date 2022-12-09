@@ -3,15 +3,11 @@ package com.example.triviagame;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
-
 import javax.swing.*;
-import java.io.FileNotFoundException;
 
 public class TriviaGameController {
     @FXML
@@ -25,9 +21,6 @@ public class TriviaGameController {
 
     @FXML
     private RadioButton ansD;
-
-    @FXML
-    private Button AnsBtn;
 
     @FXML
     private Label questionLabel;
@@ -46,19 +39,16 @@ public class TriviaGameController {
     @FXML
     private AnchorPane finishPane;
 
-    private GraphicsContext gc;
-    private QuestionsReserve que;
+    private QuestionsReserve trivia;
     private Question game;
-    final ToggleGroup group = new ToggleGroup();
-    boolean right = false;
-    boolean firstRound = true;
-    boolean lastRound = false;
+    private ToggleGroup group;
+    private boolean right = false;
+    private boolean firstRound = true;
+    private boolean lastRound = false;
 
-
-
-    public void initialize() throws FileNotFoundException {
-        que = new QuestionsReserve();
-        //   body = new HangManBody();
+    public void initialize() {
+        group = new ToggleGroup();
+        trivia = new QuestionsReserve();
         ansA.setToggleGroup(group);
         ansB.setToggleGroup(group);
         ansC.setToggleGroup(group);
@@ -67,43 +57,48 @@ public class TriviaGameController {
     }
 
     @FXML
-    void ansBtnPressed(ActionEvent event) {
+    private void ansBtnPressed(ActionEvent event) {
         checkAnswer();
-        if (que.questionsLeft() > 0) {
-            game.setQuestion(que.getQuestion());
-            game.setShuffeldAnswers(que.getAnswers());
+        if (trivia.questionsLeft() > 0) {
+            game.setQuestion(trivia.getQuestion());
+            game.setShuffeldAnswers(trivia.getAnswers());
         } else
             lastRound = true;
         updateLabels();
-
     }
     @FXML
-    void yesBtnPressed(ActionEvent event) {
-//        game.resetGame();
-//        initGame();
+    private void restartPressed(ActionEvent event) {
+        //init game with boolean final round.
+        lastRound = true;
+        updateLabels();
     }
     @FXML
-    void noBtnPressed(ActionEvent event) {
+    private void yesBtnPressed(ActionEvent event) {
+        game.resetGame();
+        trivia.resetQuestions();
+        game.setQuestion(trivia.getQuestion());
+        game.setShuffeldAnswers(trivia.getAnswers());
+        lastRound = false;
+        firstRound = false;
+     //   finishPane.setVisible(false);
+        updateNewGameLabels();
+    }
+    @FXML
+    private void noBtnPressed(ActionEvent event) {
         Platform.exit();
         JOptionPane.showMessageDialog(null, "Good Bye!", "GoodBye", JOptionPane.INFORMATION_MESSAGE);
     }
 
-
-        private void initGame() {
-//        gc.clearRect(0, 0, cnvs.getWidth(), cnvs.getHeight());
-//        finished = false;
-//        win = false;
-//        finishScene();
-//        drawCounter = 0;
-        que.parseQuestions();
+    private void initGame() {
+        trivia.parseQuestions();
         game = new Question();
-        game.setQuestion(que.getQuestion());
-        game.setShuffeldAnswers(que.getAnswers());
+        game.setQuestion(trivia.getQuestion());
+        game.setShuffeldAnswers(trivia.getAnswers());
         updateLabels();
         firstRound = false;
     }
 
-    public void checkAnswer() {
+    private void checkAnswer() {
         if (group.getSelectedToggle() == ansA)
             right = ansA.getText().equals(game.getCorrectAnswer());
         else if (group.getSelectedToggle() == ansB)
@@ -116,7 +111,7 @@ public class TriviaGameController {
     }
 
 
-    public void updateLabels() {
+    private void updateLabels() {
         if (!firstRound) {
             greetLabel.setText(game.greetMessage(right));
             greetLabel.setVisible(true);
@@ -137,4 +132,17 @@ public class TriviaGameController {
 
         }
     }
+
+    private void updateNewGameLabels() {
+        finishPane.setVisible(false);
+        triviaPane.setVisible(true);
+        scoreLabel.setText(game.getScore() + "");
+        greetLabel.setVisible(false);
+
+    }
+
+// fix greet label and score label updates for round 2 and on
+    // randomize questions
+
+
 }
