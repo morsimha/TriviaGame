@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 import java.util.Scanner;
 
 public class QuestionsReserve {
@@ -12,56 +14,47 @@ public class QuestionsReserve {
 
     private ArrayList<String> questions = new ArrayList<String>();
     private ArrayList<String> answers = new ArrayList<String>();
-    private int questionNum = 0;
-    private int questionIndex = 0;
+    private int currAnswerIndex = 0;
+    private int currQuestionIndex = 0;
+    private int randInd;
     private int totalQuestions;
 
     public void resetQuestions(){
-        questionNum = 0;
-        questionIndex = totalQuestions;
+        currAnswerIndex = 0;
+        currQuestionIndex = 0;
     }
 
     public int questionsLeft(){
-        return questionIndex;
+        currQuestionIndex++;
+        return totalQuestions-currQuestionIndex;
     }
 
     public String getQuestion(){
-            questionIndex--;
-            return questions.get(questionNum/MAX_ANSWERS);
+        return questions.get(currQuestionIndex);
     }
 
     public ArrayList<String> getAnswers(){
         ArrayList<String> orderedAnswers = new ArrayList<String>();
         for (int i=0;i<MAX_ANSWERS;i++) {
-            orderedAnswers.add(answers.get(questionNum));
-            questionNum++;
+            orderedAnswers.add(answers.get(currAnswerIndex));
+            currAnswerIndex++;
         }
         return orderedAnswers;
     }
 
-    public ArrayList<String> getQuestions(){
-        return questions;
-    }
-
-    public ArrayList<String> getAnswers2(){
-        return answers;
-    }
-
     public void parseQuestions(){
-        try { // need to do for each 5th line
-            //probably send the answers to question class
+        try {
             Scanner input = new Scanner(new File(FILE_NAME));
             int counter = 0;
             while (input.hasNextLine()) {
                 if (counter % 5 == 0) {
                     questions.add(input.nextLine());
-                    questionIndex++;
+                    totalQuestions++;
                 }
                 else
                     answers.add(input.nextLine());
                 counter++;
             }
-            totalQuestions = questionIndex;
             input.close();
         }
         catch (IOException e) {

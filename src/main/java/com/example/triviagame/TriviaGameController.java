@@ -90,7 +90,7 @@ public class TriviaGameController {
         JOptionPane.showMessageDialog(null, "Good Bye!", "GoodBye", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private void updateLabels() {
+    private void updateLabels() { //TODO: can add buttons to list and for loop on it.
         int index = 0;
         questionLabel.setText(game.getQuestion());
         ansA.setText(game.getAnswer(index++));
