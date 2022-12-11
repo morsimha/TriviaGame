@@ -5,7 +5,7 @@ import java.util.Collections;
 
 public class Question {
     private String question;
-    private ArrayList<String> shuffeldAnswers = new ArrayList<String>();
+    private ArrayList<String> shuffledAnswers = new ArrayList<String>();
     private int score = 0;
     private String correctAns;
 
@@ -14,20 +14,15 @@ public class Question {
         score = 0;
         correctAns="";
         question="";
-        shuffeldAnswers.clear();
+        shuffledAnswers.clear();
     }
-
 
     public String getQuestion(){
         return question;
     }
 
     public String getAnswer(int ind){
-        return shuffeldAnswers.get(ind);
-    }
-
-    public String getCorrectAnswer(){
-        return correctAns;
+        return shuffledAnswers.get(ind);
     }
 
     public int getScore(){
@@ -38,10 +33,10 @@ public class Question {
         question = currQuestion;
     }
 
-    public void setShuffeldAnswers(ArrayList<String> answers){
+    public void setShuffledAnswers(ArrayList<String> answers){
         correctAns = answers.get(0);
         Collections.shuffle(answers);
-        shuffeldAnswers = answers;
+        shuffledAnswers = answers;
     }
 
     public void updateScore(boolean right){

@@ -32,10 +32,10 @@ public class QuestionsReserve {
 
     public ArrayList<String> getAnswers(){
         ArrayList<String> orderedAnswers = new ArrayList<String>();
-        orderedAnswers.add(answers.get(questionNum++));
-        orderedAnswers.add(answers.get(questionNum++));
-        orderedAnswers.add(answers.get(questionNum++));
-        orderedAnswers.add(answers.get(questionNum++));
+        for (int i=0;i<MAX_ANSWERS;i++) {
+            orderedAnswers.add(answers.get(questionNum));
+            questionNum++;
+        }
         return orderedAnswers;
     }
 
