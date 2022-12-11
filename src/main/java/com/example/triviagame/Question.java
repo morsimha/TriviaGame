@@ -58,6 +58,10 @@ public class Question {
             return "Incorrect..";
     }
 
+    public boolean checkAnswer(String answer) {
+        return answer.equals(correctAns);
+    }
+
 
 
 
