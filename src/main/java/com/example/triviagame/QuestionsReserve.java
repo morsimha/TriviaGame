@@ -25,11 +25,6 @@ public class QuestionsReserve {
         questionsLeft = totalQuestions;
     }
 
-    public int questionsLeft(){
-        currQuestionIndex++;
-        return totalQuestions-currQuestionIndex;
-    }
-
     public String getQuestion(){ //using randomizedInd array to get a random index
         int randInd = totalQuestions-questionsLeft;
         currQuestionIndex = randomizedInd.get(randInd) / MAX_ANSWERS;
