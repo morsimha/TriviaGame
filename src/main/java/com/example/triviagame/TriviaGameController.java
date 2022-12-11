@@ -1,12 +1,13 @@
 package com.example.triviagame;
 
+import javafx.animation.FadeTransition;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
 import javax.swing.*;
 
 public class TriviaGameController {
@@ -46,6 +47,8 @@ public class TriviaGameController {
 
     private boolean right;
     private boolean firstRound = true;
+    private FadeTransition fadeIn = new FadeTransition(Duration.millis(1000));
+
 
     public void initialize() {
         trivia = new QuestionsReserve();
@@ -56,30 +59,35 @@ public class TriviaGameController {
         game.setShuffledAnswers(trivia.getAnswers());
         updateLabels();
         firstRound = false;
+        initFadeAnimation();
+
     }
 
     @FXML
-    private void ansBtnPressed(ActionEvent event) {
-
-        RadioButton ans = (RadioButton)answers.getSelectedToggle();
-        right = game.checkAnswer(ans.getText());
-        game.updateScore(right);
-//        if (trivia.questionsLeft() > 0) {
+    private void ansBtnPressed() {
         try {
-            game.setQuestion(trivia.getQuestion());
-            game.setShuffledAnswers(trivia.getAnswers());
-            updateLabels();
-            // } else
-        } catch (IndexOutOfBoundsException e) {
-            updateFinishLabels();
+            RadioButton ans = (RadioButton) answers.getSelectedToggle();
+            right = game.checkAnswer(ans.getText());
+            game.updateScore(right);
+            ans.setSelected(false);
+            try {
+                game.setQuestion(trivia.getQuestion());
+                game.setShuffledAnswers(trivia.getAnswers());
+                updateLabels();
+            } catch (IndexOutOfBoundsException e) {
+                updateFinishLabels();
+            }
+        }
+        catch (NullPointerException e){
+            JOptionPane.showMessageDialog(null, "Please select one answer.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     @FXML
-    private void restartPressed(ActionEvent event) {
+    private void restartPressed() {
         updateFinishLabels();
     }
     @FXML
-    private void yesBtnPressed(ActionEvent event) {
+    private void yesBtnPressed() {
         game.resetGame();
         trivia.resetQuestions();
         trivia.randomizeQuestion();
@@ -90,10 +98,19 @@ public class TriviaGameController {
         updateLabels();
     }
     @FXML
-    private void noBtnPressed(ActionEvent event) {
+    private void exitBtnPressed() {
         Platform.exit();
         JOptionPane.showMessageDialog(null, "Good Bye!", "GoodBye", JOptionPane.INFORMATION_MESSAGE);
     }
+
+    private void initFadeAnimation() {
+        fadeIn.setNode(triviaPane);
+        fadeIn.setFromValue(0.0);
+        fadeIn.setToValue(1.0);
+        fadeIn.setCycleCount(1);
+        fadeIn.setAutoReverse(false);
+    }
+
 
     private void updateLabels() { //TODO: can add buttons to list and for loop on it.
         int index = 0;
@@ -109,6 +126,8 @@ public class TriviaGameController {
             greetLabel.setText(game.greetMessage(right));
             greetLabel.setVisible(true);
             scoreLabel.setText(game.getScore() + "");
+            fadeIn.playFromStart();
+
         }
     }
 
@@ -116,6 +135,8 @@ public class TriviaGameController {
         finalScoreLabel.setText(game.getScore() + "");
         finishPane.setVisible(true);
         triviaPane.setVisible(false);
+        fadeIn.setNode(finishPane);
+        fadeIn.playFromStart();
     }
 
     private void updateNewGameLabels() {
@@ -123,9 +144,8 @@ public class TriviaGameController {
         triviaPane.setVisible(true);
         scoreLabel.setText(game.getScore() + "");
         greetLabel.setVisible(false);
+        fadeIn.setNode(triviaPane);
+        fadeIn.playFromStart();
     }
-
-    // randomize questions
-
 
 }
