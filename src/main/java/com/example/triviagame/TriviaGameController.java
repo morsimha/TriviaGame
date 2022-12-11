@@ -50,6 +50,7 @@ public class TriviaGameController {
     public void initialize() {
         trivia = new QuestionsReserve();
         trivia.parseQuestions();
+        trivia.randomizeQuestion();
         game = new Question();
         game.setQuestion(trivia.getQuestion());
         game.setShuffledAnswers(trivia.getAnswers());
@@ -63,12 +64,15 @@ public class TriviaGameController {
         RadioButton ans = (RadioButton)answers.getSelectedToggle();
         right = game.checkAnswer(ans.getText());
         game.updateScore(right);
-        if (trivia.questionsLeft() > 0) {
+//        if (trivia.questionsLeft() > 0) {
+        try {
             game.setQuestion(trivia.getQuestion());
             game.setShuffledAnswers(trivia.getAnswers());
             updateLabels();
-        } else
+            // } else
+        } catch (IndexOutOfBoundsException e) {
             updateFinishLabels();
+        }
     }
     @FXML
     private void restartPressed(ActionEvent event) {
@@ -78,6 +82,7 @@ public class TriviaGameController {
     private void yesBtnPressed(ActionEvent event) {
         game.resetGame();
         trivia.resetQuestions();
+        trivia.randomizeQuestion();
         game.setQuestion(trivia.getQuestion());
         game.setShuffledAnswers(trivia.getAnswers());
         firstRound = true;

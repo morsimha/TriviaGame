@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
 import java.util.Scanner;
 
 public class QuestionsReserve {
@@ -14,14 +13,16 @@ public class QuestionsReserve {
 
     private ArrayList<String> questions = new ArrayList<String>();
     private ArrayList<String> answers = new ArrayList<String>();
+    private ArrayList<Integer> randomizedInd = new ArrayList<Integer>();
     private int currAnswerIndex = 0;
     private int currQuestionIndex = 0;
-    private int randInd;
     private int totalQuestions;
+    private int questionsLeft;
 
     public void resetQuestions(){
         currAnswerIndex = 0;
         currQuestionIndex = 0;
+        questionsLeft = totalQuestions;
     }
 
     public int questionsLeft(){
@@ -29,7 +30,11 @@ public class QuestionsReserve {
         return totalQuestions-currQuestionIndex;
     }
 
-    public String getQuestion(){
+    public String getQuestion(){ //using randomizedInd array to get a random index
+        int randInd = totalQuestions-questionsLeft;
+        currQuestionIndex = randomizedInd.get(randInd) / MAX_ANSWERS;
+        currAnswerIndex = randomizedInd.get(randInd);
+        questionsLeft--;
         return questions.get(currQuestionIndex);
     }
 
@@ -50,17 +55,26 @@ public class QuestionsReserve {
                 if (counter % 5 == 0) {
                     questions.add(input.nextLine());
                     totalQuestions++;
+                    randomizedInd.add(answers.size()); //collecting the indexes of each block of answers start
                 }
                 else
                     answers.add(input.nextLine());
                 counter++;
             }
             input.close();
+            questionsLeft = totalQuestions;
         }
         catch (IOException e) {
             JOptionPane.showMessageDialog(null, "File '"+ FILE_NAME + "' was not found.\nPlease make sure it exist outside of /src directory.", "Error", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
+        finally {
+            System.out.println(randomizedInd);
+        }
+    }
+
+    public void randomizeQuestion(){
+        Collections.shuffle(randomizedInd);
     }
 
 
