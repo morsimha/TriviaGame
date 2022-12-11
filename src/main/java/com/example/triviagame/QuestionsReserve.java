@@ -68,9 +68,6 @@ public class QuestionsReserve {
             JOptionPane.showMessageDialog(null, "File '"+ FILE_NAME + "' was not found.\nPlease make sure it exist outside of /src directory.", "Error", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
-        finally {
-            System.out.println(randomizedInd);
-        }
     }
 
     public void randomizeQuestion(){

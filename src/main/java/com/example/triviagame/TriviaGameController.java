@@ -27,7 +27,7 @@ public class TriviaGameController {
     private Label questionLabel;
 
     @FXML
-    private Label greetLabel;
+    private Label successLabel;
 
     @FXML
     private Label scoreLabel;
@@ -112,7 +112,7 @@ public class TriviaGameController {
     }
 
 
-    private void updateLabels() { //TODO: can add buttons to list and for loop on it.
+    private void updateLabels() {
         int index = 0;
         questionLabel.setText(game.getQuestion());
         ansA.setText(game.getAnswer(index++));
@@ -123,8 +123,8 @@ public class TriviaGameController {
         if (firstRound)
             firstRound = false;
         else { //every round beside the first.
-            greetLabel.setText(game.greetMessage(right));
-            greetLabel.setVisible(true);
+            successLabel.setText(game.greetMessage(right));
+            successLabel.setVisible(true);
             scoreLabel.setText(game.getScore() + "");
             fadeIn.playFromStart();
 
@@ -143,7 +143,7 @@ public class TriviaGameController {
         finishPane.setVisible(false);
         triviaPane.setVisible(true);
         scoreLabel.setText(game.getScore() + "");
-        greetLabel.setVisible(false);
+        successLabel.setVisible(false);
         fadeIn.setNode(triviaPane);
         fadeIn.playFromStart();
     }
